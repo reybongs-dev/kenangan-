@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f48fb1" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self' blob:; script-src 'self'; style-src 'self'; img-src 'self' blob: data: https://i.scdn.co https://mosaic.scdn.co; media-src 'self' blob: data:; frame-src https://open.spotify.com; connect-src 'self' https://open.spotify.com https://lrclib.net; object-src 'none'; base-uri 'self'; form-action 'self';"
+  />
+  <title>Ruang Kenangan 🌸</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <h1>Ruang Kenangan 🌸</h1>
+        <p class="subtitle">Simpan cerita, kolase foto, &amp; lagu kenangan dengan rapi 🤍</p>
+      </div>
+      <button id="themeToggle" type="button" class="btn-clay-soft">🌙 Mode Gelap</button>
+    </div>
+  </header>
+
+  <nav class="tab-nav" aria-label="Navigasi Halaman">
+    <button id="navInputBtn" type="button" class="tab-btn active" data-page="inputPage">
+      ✍️ Halaman 1 · Isi Kenangan
+    </button>
+    <button id="navGalleryBtn" type="button" class="tab-btn" data-page="galleryPage">
+      🖼️ Halaman 2 · Album &amp; Kolase (<span id="navCount">0</span>)
+    </button>
+  </nav>
+
+  <main class="container">
+    <!-- HALAMAN 1: ISI DATA KENANGAN -->
+    <section id="inputPage" class="page-view active">
+      <div class="stats-grid" aria-label="Ringkasan Data">
+        <div class="stat-pill clay-card-sm">
+          <span class="stat-icon">💞</span>
+          <div>
+            <span class="stat-label">Total Kenangan</span>
+            <strong id="totalMemories" class="stat-value">0 momen</strong>
+          </div>
+        </div>
+        <div class="stat-pill clay-card-sm">
+          <span class="stat-icon">📂</span>
+          <div>
+            <span class="stat-label">Kelompok Kolase</span>
+            <strong id="totalGroups" class="stat-value">0 grup</strong>
+          </div>
+        </div>
+        <div class="stat-pill clay-card-sm">
+          <span class="stat-icon" id="networkIcon">🌐</span>
+          <div>
+            <span class="stat-label">Status Jaringan</span>
+            <strong id="networkStatusValue" class="stat-value">Online</strong>
+          </div>
+        </div>
+      </div>
+
+      <form id="memoryForm" class="clay-card form-card" novalidate>
+        <div class="card-header">
+          <div>
+            <h2>🌷 Tulis Kenangan Baru</h2>
+            <p class="card-desc">Isi detail momen di bawah ini agar tersusun rapi di album kolase.</p>
+          </div>
+          <span id="statusInfo" class="status-badge">✨ Siap dipakai</span>
+        </div>
+
+        <!-- Bagian 1 -->
+        <section class="form-section clay-inset-box" aria-labelledby="sec1Title">
+          <div class="section-head">
+            <span class="section-step">1</span>
+            <div>
+              <h3 id="sec1Title" class="section-title">Info Utama Momen</h3>
+              <p class="section-sub">Judul, tanggal kejadian, dan folder kolase</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>Judul Kenangan *</span>
+              <input id="titleInput" type="text" maxlength="100" placeholder="Contoh: Senja di taman &amp; kopi hangat" required />
+            </label>
+
+            <label class="field">
+              <span>Tanggal Kejadian *</span>
+              <input id="dateInput" type="date" required />
+            </label>
+
+            <label class="field">
+              <span>Kelompok / Folder Kolase *</span>
+              <input id="groupInput" type="text" list="groupSuggestions" maxlength="60" placeholder="Misal: Liburan Pertama, Jalan Sore" required />
+              <datalist id="groupSuggestions"></datalist>
+            </label>
+
+            <label class="field">
+              <span>Gaya Bingkai Foto</span>
+              <select id="frameStyleInput">
+                <option value="polaroid-tilt">Polaroid Miring ✨</option>
+                <option value="scrapbook-collage">Scrapbook Stiker 🎀</option>
+                <option value="romance-classic">Romantis Klasik 🌸</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <!-- Bagian 2 -->
+        <section class="form-section clay-inset-box" aria-labelledby="sec2Title">
+          <div class="section-head">
+            <span class="section-step">2</span>
+            <div>
+              <h3 id="sec2Title" class="section-title">Cerita &amp; Catatan Singkat</h3>
+              <p class="section-sub">Caption bingkai dan kisah lengkap di balik momen ini</p>
+            </div>
+          </div>
+
+          <div class="form-stack">
+            <label class="field">
+              <span>Caption Singkat di Bingkai <em class="opt">(opsional)</em></span>
+              <input id="noteInput" type="text" maxlength="80" placeholder="Misal: Hari yang paling bikin rindu..." />
+            </label>
+
+            <label class="field">
+              <span>Cerita Lengkap Kenangan *</span>
+              <textarea id="storyInput" rows="4" maxlength="2000" placeholder="Tuliskan suasana, obrolan kecil, atau hal berkesan yang ingin selalu diingat..." required></textarea>
+            </label>
+          </div>
+        </section>
+
+        <!-- Bagian 3 -->
+        <section class="form-section clay-inset-box" aria-labelledby="sec3Title">
+          <div class="section-head">
+            <span class="section-step">3</span>
+            <div>
+              <h3 id="sec3Title" class="section-title">Foto &amp; Lagu Pengiring <em class="opt">(opsional)</em></h3>
+              <p class="section-sub">Lampirkan foto galeri, file audio lokal, lirik bebas, atau opsional link lagu Spotify</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>📷 Pilih Foto Galeri (maks. 8 MB)</span>
+              <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
+            </label>
+
+            <label class="field">
+              <span>🎵 Pilih File Lagu Offline (maks. 20 MB)</span>
+              <input id="audioInput" type="file" accept="audio/mpeg,audio/mp4,audio/ogg,audio/wav,audio/*" />
+            </label>
+
+            <label class="field full-span">
+              <span>🎧 Atau Impor Link Lagu Spotify (khusus track lagu)</span>
+              <input id="spotifyUrlInput" type="url" maxlength="250" placeholder="Contoh: https://open.spotify.com/track/4cOdK2wGLETKBW3PvgPWqT" />
+              <small class="hint">
+                Validasi keamanan aktif: hanya menerima link track lagu resmi open.spotify.com/track/... &amp; otomatis nonaktif saat offline agar tidak membebani penyimpanan.
+              </small>
+            </label>
+
+            <div class="lyric-clip-studio full-span" aria-label="Pemilih Lirik & Potongan Audio Maksimal 40 Detik">
+              <div class="lyric-studio-head">
+                <div>
+                  <strong>✍️ Lirik Pilihan &amp; Potongan Audio (Maks. 40 Detik)</strong>
+                  <p class="hint">Cari lirik lagu apa pun (LRCLIB) atau tempel/tulis lirik bebas langsung tanpa perlu link Spotify, pilih bait/baris bebas, dan pangkas audio lokal maksimal 40 detik.</p>
+                </div>
+                <div class="lyric-studio-btns">
+                  <button id="fetchSpotifyMetaBtn" type="button" class="btn-secondary-sm">🎵 Ambil Info Track</button>
+                  <button id="searchLyricsBtn" type="button" class="btn-secondary-sm">📜 Cari Lirik</button>
+                </div>
+              </div>
+
+              <div id="spotifyMetaBox" class="spotify-meta-box" hidden></div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>Judul Lagu (untuk cari lirik)</span>
+                  <input id="lyricTrackTitleInput" type="text" maxlength="120" placeholder="Contoh: Blue" />
+                </label>
+
+                <label class="field">
+                  <span>Penyanyi / Artis</span>
+                  <input id="lyricArtistInput" type="text" maxlength="120" placeholder="Contoh: Yung Kai" />
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>Mulai Potongan Audio (detik)</span>
+                  <input id="clipStartSecInput" type="number" min="0" max="600" step="1" value="1" />
+                </label>
+
+                <label class="field">
+                  <span>Durasi Potongan (maks. 40 detik)</span>
+                  <input id="clipDurationSecInput" type="number" min="1" max="40" step="1" value="40" />
+                </label>
+              </div>
+
+              <div class="lyric-clip-actions">
+                <button id="trimAudio40Btn" type="button" class="btn-secondary-sm">✂️ Potong Audio (Maks. 40 dtk)</button>
+                <span id="clipStatusText" class="hint">Belum ada potongan audio (akan otomatis dibatasi maks. 40 detik saat disimpan).</span>
+              </div>
+              <audio id="clipPreviewAudio" controls preload="metadata" hidden></audio>
+
+              <div id="lyricLinesPicker" class="lyric-lines-picker" hidden></div>
+
+              <label class="field">
+                <span>Lirik Terpilih (bisa diedit bebas, maks. 600 karakter)</span>
+                <textarea id="selectedLyricsInput" rows="3" maxlength="600" placeholder="Klik baris lirik di atas atau ketik/tempel potongan lirik favorit kamu di sini..."></textarea>
+              </label>
+            </div>
+
+          </div>
+        </section>
+
+        <div class="form-footer">
+          <button type="submit" class="btn-clay-primary">💗 Simpan Kenangan &amp; Lihat di Halaman 2</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- HALAMAN 2: HASIL, KOLASE KELOMPOK & LIHAT KENANGAN -->
+    <section id="galleryPage" class="page-view" hidden>
+      <section class="clay-card">
+        <div class="card-header">
+          <div>
+            <h2>🌸 Kolase &amp; Lembaran Kenangan</h2>
+            <p class="card-desc">Dikelompokkan otomatis sesuai folder kolase yang kamu buat.</p>
+          </div>
+          <div class="gallery-header-actions">
+            <button id="viewModeCollageBtn" type="button" class="btn-secondary-sm active-mode">🗂️ Kolase Lengkap</button>
+            <button id="viewModePhotoGridBtn" type="button" class="btn-secondary-sm">🖼️ Galeri Semua Foto</button>
+            <button id="backToInputBtn" type="button" class="btn-clay-soft">+ Tambah Baru</button>
+          </div>
+        </div>
+
+        <div class="filter-grid">
+          <label class="field">
+            <span>🔍 Cari Kenangan</span>
+            <input id="searchInput" type="search" maxlength="100" placeholder="Ketik judul, cerita, atau tanggal..." />
+          </label>
+
+          <label class="field">
+            <span>📂 Filter Kelompok Kolase</span>
+            <select id="groupFilterSelect">
+              <option value="ALL">Semua Kelompok</option>
+            </select>
+          </label>
+        </div>
+
+        <div id="groupedCollageContainer" class="grouped-container"></div>
+      </section>
+    </section>
+  </main>
+
+  <!-- MODAL LIHAT DETAIL KENANGAN -->
+  <div id="detailModal" class="modal-backdrop" hidden>
+    <div class="modal-card clay-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="memory-top">
+        <div>
+          <span id="modalGroupBadge" class="group-badge">📂 Kelompok</span>
+          <h3 id="modalTitle" class="memory-title">🌷 Judul Kenangan</h3>
+          <span id="modalDate" class="memory-date">🗓️ Tanggal</span>
+        </div>
+        <button id="closeModalBtn" type="button" class="btn-clay-soft">Tutup ✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
